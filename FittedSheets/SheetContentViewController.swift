@@ -138,7 +138,7 @@ public class SheetContentViewController: UIViewController {
         self.updateAfterLayout()
     }
     
-    func epdateAfterLayout() {
+    func updateAfterLayout() {
         self.size = self.childViewController.view.bounds.height
         //self.updatePreferredHeight()
     }
