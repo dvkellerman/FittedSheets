@@ -148,6 +148,7 @@ public class SheetViewController: UIViewController {
     
     public var shouldDismiss: ((SheetViewController) -> Bool)?
     public var didDismiss: ((SheetViewController) -> Void)?
+    public var sizeWillChange: ((SheetViewController, SheetSize, CGFloat) -> Void)?
     public var sizeChanged: ((SheetViewController, SheetSize, CGFloat) -> Void)?
     public var panGestureShouldBegin: ((UIPanGestureRecognizer) -> Bool?)?
     
@@ -479,6 +480,9 @@ public class SheetViewController: UIViewController {
                     initialSpringVelocity: self.options.transitionVelocity,
                     options: self.options.transitionAnimationOptions,
                     animations: {
+                    if previousSize != newSize {
+                        self.sizeWillChange?(self, newSize, newContentHeight)
+                    }
                     self.contentViewController.view.transform = CGAffineTransform.identity
                     self.contentViewHeightConstraint.constant = newContentHeight
                     self.transition.setPresentor(percentComplete: 0)
@@ -581,6 +585,9 @@ public class SheetViewController: UIViewController {
         if animated {
             UIView.animate(withDuration: duration, delay: 0, options: options, animations: { [weak self] in
                 guard let self = self, let constraint = self.contentViewHeightConstraint else { return }
+                if previousSize != size {
+                    self.sizeWillChange?(self, size, newHeight)
+                }
                 constraint.constant = newHeight
                 self.view.layoutIfNeeded()
             }, completion: { _ in
