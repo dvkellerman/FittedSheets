@@ -56,8 +56,9 @@ public class SheetContentViewController: UIViewController {
     
     public var pullBarHidden: Bool = false {
         didSet {
+            self.pullBarHeightConstraint?.constant = self.pullBarHidden ? 0 : self.options.pullBarHeight
             UIView.animate(withDuration: 0.4) {
-                self.pullBarHeightConstraint?.constant = self.pullBarHidden ? 0 : self.options.pullBarHeight
+                self.view.layoutIfNeeded()
             }
         }
     }
