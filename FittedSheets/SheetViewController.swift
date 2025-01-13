@@ -138,6 +138,10 @@ public class SheetViewController: UIViewController {
         set { self.contentViewController.pullBarBackgroundColor = newValue }
     }
     
+    public var pullBarHidden: Bool = false {
+        didSet { self.contentViewController.pullBarHidden = pullBarHidden }
+    }
+    
     public static var treatPullBarAsClear: Bool = false
     public var treatPullBarAsClear: Bool {
         get { return self.contentViewController.treatPullBarAsClear }

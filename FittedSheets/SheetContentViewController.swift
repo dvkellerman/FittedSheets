@@ -54,6 +54,14 @@ public class SheetContentViewController: UIViewController {
         set { self.gripView.backgroundColor = newValue }
     }
     
+    public var pullBarHidden: Bool = false {
+        didSet {
+            UIView.animate(withDuration: 0.4) {
+                self.pullBarHeightConstraint?.constant = self.pullBarHidden ? 0 : self.options.pullBarHeight
+            }
+        }
+    }
+    
     public var pullBarBackgroundColor: UIColor? {
         get { return self.pullBarView.backgroundColor }
         set { self.pullBarView.backgroundColor = newValue }
@@ -74,6 +82,7 @@ public class SheetContentViewController: UIViewController {
     private var contentBottomConstraint: NSLayoutConstraint?
     private var navigationHeightConstraint: NSLayoutConstraint?
     private var gripSizeConstraints: [NSLayoutConstraint] = []
+    private var pullBarHeightConstraint: NSLayoutConstraint?
     public var childContainerView = UIView()
     public var pullBarView = UIView()
     public var gripView = UIView()
@@ -129,7 +138,7 @@ public class SheetContentViewController: UIViewController {
         self.updateAfterLayout()
     }
     
-    func updateAfterLayout() {
+    func epdateAfterLayout() {
         self.size = self.childViewController.view.bounds.height
         //self.updatePreferredHeight()
     }
@@ -274,11 +283,12 @@ public class SheetContentViewController: UIViewController {
         pullBarView.isUserInteractionEnabled = true
         pullBarView.backgroundColor = self.pullBarBackgroundColor
         self.contentWrapperView.addSubview(pullBarView)
+       
         Constraints(for: pullBarView) {
             $0.top.pinToSuperview()
             $0.left.pinToSuperview()
             $0.right.pinToSuperview()
-            $0.height.set(options.pullBarHeight)
+            self.pullBarHeightConstraint = $0.height.set(options.pullBarHeight)
         }
         self.pullBarView = pullBarView
         
